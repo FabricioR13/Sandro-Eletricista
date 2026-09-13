@@ -261,24 +261,24 @@ function App() {
       </nav>
 
       {/* Hero Section (inclui os selos de confiança, tudo dentro da 1ª tela) */}
-      <section id="inicio" className="relative min-h-screen flex flex-col pt-16 overflow-hidden">
+      <section id="inicio" className="relative min-h-screen lg:h-screen flex flex-col pt-16 overflow-hidden">
         <div className="absolute inset-0 bg-[url('/images/bg-pattern.png')] opacity-20"></div>
         <div className="absolute inset-0 bg-gradient-to-br from-black via-black/95 to-red-900/20"></div>
 
-        <div className="relative flex-1 flex items-center w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+        <div className="relative flex-1 min-h-0 flex items-center w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-3">
           <div className="grid lg:grid-cols-2 gap-4 sm:gap-8 lg:gap-12 items-center w-full">
-            <div className="space-y-3 sm:space-y-4 lg:space-y-6 text-center lg:text-left">
+            <div className="space-y-3 sm:space-y-4 lg:space-y-3 text-center lg:text-left">
               <div className="inline-flex items-center gap-2 bg-red-600/20 border border-red-600/50 rounded-full px-3 py-1.5 sm:px-4 sm:py-2">
-                <span className="text-red-500 font-bold text-sm sm:text-base lg:text-lg">Fala neni!</span>
+                <span className="text-red-500 font-bold text-sm sm:text-base lg:text-base">Fala neni!</span>
                 <Zap className="w-4 h-4 sm:w-5 sm:h-5 text-red-500" />
               </div>
 
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black leading-tight">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-6xl font-black leading-tight">
                 ELETRICISTA<br />
                 <span className="text-red-600">SANDRO ALANIZ</span>
               </h1>
 
-              <p className="text-sm sm:text-base md:text-lg lg:text-2xl text-gray-300 font-medium">
+              <p className="text-sm sm:text-base md:text-lg lg:text-lg xl:text-xl text-gray-300 font-medium">
                 Instalação elétrica com <span className="text-red-500 font-bold">SEGURANÇA</span>, <span className="text-red-500 font-bold">QUALIDADE</span> e <span className="text-red-500 font-bold">CONFIANÇA</span>!
               </p>
 
@@ -287,20 +287,20 @@ function App() {
                   href="https://wa.me/5551986318828"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bg-red-600 hover:bg-red-700 text-white px-5 py-2.5 sm:px-8 sm:py-4 rounded-xl font-bold text-sm sm:text-base lg:text-lg transition-all flex items-center justify-center gap-2 sm:gap-3 shadow-lg shadow-red-600/30"
+                  className="bg-red-600 hover:bg-red-700 text-white px-5 py-2.5 sm:px-8 sm:py-3 rounded-xl font-bold text-sm sm:text-base lg:text-base transition-all flex items-center justify-center gap-2 sm:gap-3 shadow-lg shadow-red-600/30"
                 >
                   <Phone className="w-4 h-4 sm:w-6 sm:h-6" />
                   FAÇA SEU ORÇAMENTO
                 </a>
                 <button
                   onClick={() => scrollToSection('servicos')}
-                  className="border-2 border-red-600 hover:bg-red-600/10 text-white px-5 py-2.5 sm:px-8 sm:py-4 rounded-xl font-bold text-sm sm:text-base lg:text-lg transition-all"
+                  className="border-2 border-red-600 hover:bg-red-600/10 text-white px-5 py-2.5 sm:px-8 sm:py-3 rounded-xl font-bold text-sm sm:text-base lg:text-base transition-all"
                 >
                   NOSSOS SERVIÇOS
                 </button>
               </div>
 
-              <div className="hidden sm:flex items-center gap-4 pt-2 lg:pt-4 justify-center lg:justify-start">
+              <div className="hidden sm:flex items-center gap-4 pt-2 lg:pt-2 justify-center lg:justify-start">
                 <div className="flex items-center gap-2 text-gray-400 text-sm lg:text-base">
                   <MapPin className="w-4 h-4 lg:w-5 lg:h-5 text-red-500" />
                   <span>Gravataí, Cachoeirinha, POA, Canoas</span>
@@ -313,7 +313,7 @@ function App() {
               <img
                 src="/images/electrician-sandro.png"
                 alt="Eletricista Sandro Alaniz"
-                className="relative w-full max-w-[200px] sm:max-w-xs md:max-w-sm lg:max-w-lg mx-auto drop-shadow-2xl"
+                className="relative w-full max-w-[200px] sm:max-w-xs md:max-w-sm lg:max-w-xl mx-auto drop-shadow-2xl lg:max-h-[60vh] lg:w-auto lg:h-auto object-contain"
               />
 
               {/* Floating Badge */}
@@ -326,7 +326,7 @@ function App() {
         </div>
 
         {/* Selos de Confiança (dentro da mesma tela do hero) */}
-        <div className="relative border-t border-red-600/20 bg-black/50 backdrop-blur-sm py-3 sm:py-4 lg:py-5">
+        <div className="relative border-t border-red-600/20 bg-black/50 backdrop-blur-sm py-3 sm:py-4 lg:py-4">
           <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
             <div className="grid grid-cols-3 md:grid-cols-5 gap-2 sm:gap-4 lg:gap-6">
               {trustBadges.map((badge, index) => (
@@ -447,11 +447,11 @@ function App() {
                 key={index}
                 className="rounded-xl sm:rounded-2xl border border-zinc-800 bg-zinc-950 overflow-hidden flex flex-col"
               >
-                <div className="aspect-square bg-black flex items-center justify-center p-1.5 sm:p-2">
+                <div className="aspect-square bg-black overflow-hidden">
                   <img
                     src={item.src}
                     alt={item.caption}
-                    className="max-w-full max-h-full object-contain"
+                    className="w-full h-full object-cover"
                   />
                 </div>
                 <p className="text-[11px] sm:text-xs text-gray-400 p-2 sm:p-3 text-center leading-snug">
@@ -466,11 +466,11 @@ function App() {
               onTouchStart={handleStepTouchStart}
               onTouchEnd={handleStepTouchEnd}
             >
-              <div className="relative aspect-square bg-black flex items-center justify-center p-1.5 sm:p-2">
+              <div className="relative aspect-square bg-black overflow-hidden">
                 <img
                   src={stepPhotos[stepIndex].src}
                   alt={stepPhotos[stepIndex].caption}
-                  className="max-w-full max-h-full object-contain select-none"
+                  className="w-full h-full object-cover select-none"
                 />
                 <button
                   onClick={prevStep}
