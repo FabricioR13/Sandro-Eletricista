@@ -283,15 +283,13 @@ function App() {
               </p>
 
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start">
-                <a
-                  href="https://wa.me/5551986318828"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <button
+                  onClick={() => scrollToSection('contato')}
                   className="bg-red-600 hover:bg-red-700 text-white px-5 py-2.5 sm:px-8 sm:py-3 rounded-xl font-bold text-sm sm:text-base lg:text-base transition-all flex items-center justify-center gap-2 sm:gap-3 shadow-lg shadow-red-600/30"
                 >
                   <Phone className="w-4 h-4 sm:w-6 sm:h-6" />
                   FAÇA SEU ORÇAMENTO
-                </a>
+                </button>
                 <button
                   onClick={() => scrollToSection('servicos')}
                   className="border-2 border-red-600 hover:bg-red-600/10 text-white px-5 py-2.5 sm:px-8 sm:py-3 rounded-xl font-bold text-sm sm:text-base lg:text-base transition-all"
@@ -308,18 +306,18 @@ function App() {
               </div>
             </div>
 
-            <div className="relative hidden sm:block">
+            <div className="relative block">
               <div className="absolute -inset-4 bg-red-600/20 rounded-full blur-3xl"></div>
               <img
                 src="/images/electrician-sandro.png"
                 alt="Eletricista Sandro Alaniz"
-                className="relative w-full max-w-[200px] sm:max-w-xs md:max-w-sm lg:max-w-xl mx-auto drop-shadow-2xl lg:max-h-[60vh] lg:w-auto lg:h-auto object-contain"
+                className="relative w-full max-w-[140px] sm:max-w-xs md:max-w-sm lg:max-w-xl mx-auto drop-shadow-2xl lg:max-h-[60vh] lg:w-auto lg:h-auto object-contain"
               />
 
               {/* Floating Badge */}
-              <div className="absolute top-2 right-2 sm:top-4 sm:right-4 bg-red-600 text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg font-bold shadow-lg transform rotate-6">
-                <span className="text-lg sm:text-2xl">10+</span>
-                <span className="block text-[10px] sm:text-xs">Anos de<br/>Experiência</span>
+              <div className="absolute top-0 right-2 sm:top-4 sm:right-4 bg-red-600 text-white px-2 py-1 sm:px-4 sm:py-2 rounded-lg font-bold shadow-lg transform rotate-6">
+                <span className="text-sm sm:text-2xl">10+</span>
+                <span className="block text-[8px] sm:text-xs">Anos de<br/>Experiência</span>
               </div>
             </div>
           </div>
