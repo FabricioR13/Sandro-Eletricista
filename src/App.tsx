@@ -504,8 +504,19 @@ function App() {
               </a>
             </div>
           </div>
-          <div className="border-t border-zinc-800 pt-8 text-center text-gray-500">
+          <div className="border-t border-zinc-800 pt-8 text-center text-gray-500 space-y-2">
             <p>© 2025 Eletricista Sandro Alaniz. Todos os direitos reservados.</p>
+            <p>
+              Site desenvolvido por{' '}
+              <a
+                href="https://wa.me/5551982165186"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-400 hover:text-red-600 transition-colors font-medium"
+              >
+                TF Solutions
+              </a>
+            </p>
           </div>
         </div>
       </footer>
