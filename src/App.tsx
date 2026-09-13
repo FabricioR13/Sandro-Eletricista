@@ -1,11 +1,11 @@
-import { useState } from 'react'
-import { 
-  Phone, 
-  MapPin, 
-  Zap, 
-  ClipboardList, 
-  Wrench, 
-  Shield, 
+import { useState, useRef } from 'react'
+import {
+  Phone,
+  MapPin,
+  Zap,
+  ClipboardList,
+  Wrench,
+  Shield,
   CheckCircle,
   Clock,
   Award,
@@ -17,11 +17,24 @@ import {
   Building,
   FileText,
   AlertTriangle,
-  Cable
+  Cable,
+  BadgeCheck,
+  Receipt,
+  Timer,
+  Image as ImageIcon,
+  Video as VideoIcon,
+  HelpCircle,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  Instagram
 } from 'lucide-react'
 
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [openFaq, setOpenFaq] = useState<number | null>(null)
+  const [stepIndex, setStepIndex] = useState(0)
+  const touchStartXRef = useRef(0)
   const [formData, setFormData] = useState({
     nome: '',
     telefone: '',
@@ -93,6 +106,70 @@ function App() {
 
   const cities = ['Gravataí', 'Cachoeirinha', 'Porto Alegre', 'Canoas']
 
+  const trustBadges = [
+    { icon: <Shield className="w-4 h-4 sm:w-5 sm:h-5 lg:w-7 lg:h-7" />, title: 'Certificado NR-10', desc: 'Normas de segurança elétrica' },
+    { icon: <BadgeCheck className="w-4 h-4 sm:w-5 sm:h-5 lg:w-7 lg:h-7" />, title: 'Garantia de 30 Dias', desc: 'Em todos os serviços' },
+    { icon: <Receipt className="w-4 h-4 sm:w-5 sm:h-5 lg:w-7 lg:h-7" />, title: 'Nota Fiscal', desc: 'Emitida em todo serviço' },
+    { icon: <Timer className="w-4 h-4 sm:w-5 sm:h-5 lg:w-7 lg:h-7" />, title: 'Atendimento 24h', desc: 'Emergências e urgências' },
+    { icon: <Home className="w-4 h-4 sm:w-5 sm:h-5 lg:w-7 lg:h-7" />, title: 'Atendimento a Domicílio', desc: 'Vamos até você' }
+  ]
+
+  const singlePhotos = [
+    { src: '/gallery/quadro-distribuicao.jpg', caption: 'Quadro de distribuição organizado e revisado' },
+    { src: '/gallery/letreiro-comercial.jpg', caption: 'Instalação elétrica de letreiro comercial' },
+    { src: '/gallery/iluminacao-led-cozinha.jpg', caption: 'Iluminação em LED para cozinha planejada' }
+  ]
+
+  const stepPhotos = [
+    { src: '/gallery/preparacao-ponto-1.jpg', caption: 'Etapa 1: Preparação do ponto elétrico no teto' },
+    { src: '/gallery/preparacao-ponto-2.jpg', caption: 'Etapa 2: Organização e identificação da fiação' },
+    { src: '/gallery/preparacao-ponto-3.jpg', caption: 'Etapa 3: Fiação pronta para instalação do ponto de luz' }
+  ]
+
+  const nextStep = () => setStepIndex((prev) => (prev + 1) % stepPhotos.length)
+  const prevStep = () => setStepIndex((prev) => (prev - 1 + stepPhotos.length) % stepPhotos.length)
+
+  const handleStepTouchStart = (e: React.TouchEvent) => {
+    touchStartXRef.current = e.touches[0].clientX
+  }
+  const handleStepTouchEnd = (e: React.TouchEvent) => {
+    const diff = touchStartXRef.current - e.changedTouches[0].clientX
+    if (diff > 40) nextStep()
+    else if (diff < -40) prevStep()
+  }
+
+  const galleryVideos = [
+    { src: '/gallery/video-servico-1.mp4', caption: 'Serviço em execução (vídeo sem áudio)' },
+    { src: '/gallery/video-servico-2.mp4', caption: 'Serviço em execução (vídeo sem áudio)' }
+  ]
+
+  const faqs = [
+    {
+      question: 'O profissional é certificado?',
+      answer: 'Sim, o Sandro atua em conformidade com as normas de segurança elétrica (NR-10).'
+    },
+    {
+      question: 'Qual a garantia dos serviços?',
+      answer: 'Todos os serviços executados têm 30 dias de garantia.'
+    },
+    {
+      question: 'Vocês emitem nota fiscal?',
+      answer: 'Sim, emitimos nota fiscal para todos os serviços realizados.'
+    },
+    {
+      question: 'Vocês atendem emergências fora do horário comercial?',
+      answer: 'Sim, temos atendimento 24h para emergências e urgências elétricas.'
+    },
+    {
+      question: 'Em quais cidades vocês atendem?',
+      answer: 'Atendemos a domicílio em Gravataí, Cachoeirinha, Porto Alegre e Canoas.'
+    },
+    {
+      question: 'Como faço para solicitar um orçamento?',
+      answer: 'É só chamar no WhatsApp ou preencher o formulário aqui no site com os detalhes do serviço que você precisa.'
+    }
+  ]
+
   return (
     <div className="min-h-screen bg-black text-white font-sans">
       {/* Navbar */}
@@ -108,11 +185,22 @@ function App() {
             <div className="hidden md:flex items-center gap-8">
               <button onClick={() => scrollToSection('inicio')} className="hover:text-red-600 transition-colors">Início</button>
               <button onClick={() => scrollToSection('servicos')} className="hover:text-red-600 transition-colors">Serviços</button>
+              <button onClick={() => scrollToSection('galeria')} className="hover:text-red-600 transition-colors">Galeria</button>
               <button onClick={() => scrollToSection('sobre')} className="hover:text-red-600 transition-colors">Sobre</button>
+              <button onClick={() => scrollToSection('faq')} className="hover:text-red-600 transition-colors">FAQ</button>
               <button onClick={() => scrollToSection('contato')} className="hover:text-red-600 transition-colors">Contato</button>
-              <a 
-                href="https://wa.me/5551986318828" 
-                target="_blank" 
+              <a
+                href="https://www.instagram.com/sandroalanizeletricista/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram"
+                className="hover:text-red-600 transition-colors"
+              >
+                <Instagram className="w-5 h-5" />
+              </a>
+              <a
+                href="https://wa.me/5551986318828"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-semibold transition-all flex items-center gap-2"
               >
@@ -137,7 +225,9 @@ function App() {
             <div className="px-4 py-4 space-y-3">
               <button onClick={() => scrollToSection('inicio')} className="block w-full text-left py-2 hover:text-red-600">Início</button>
               <button onClick={() => scrollToSection('servicos')} className="block w-full text-left py-2 hover:text-red-600">Serviços</button>
+              <button onClick={() => scrollToSection('galeria')} className="block w-full text-left py-2 hover:text-red-600">Galeria</button>
               <button onClick={() => scrollToSection('sobre')} className="block w-full text-left py-2 hover:text-red-600">Sobre</button>
+              <button onClick={() => scrollToSection('faq')} className="block w-full text-left py-2 hover:text-red-600">FAQ</button>
               <button onClick={() => scrollToSection('contato')} className="block w-full text-left py-2 hover:text-red-600">Contato</button>
               <a 
                 href="https://wa.me/5551986318828" 
@@ -152,80 +242,97 @@ function App() {
         )}
       </nav>
 
-      {/* Hero Section */}
-      <section id="inicio" className="relative min-h-screen flex items-center pt-16 overflow-hidden">
+      {/* Hero Section (inclui os selos de confiança, tudo dentro da 1ª tela) */}
+      <section id="inicio" className="relative min-h-screen flex flex-col pt-16 overflow-hidden">
         <div className="absolute inset-0 bg-[url('/images/bg-pattern.png')] opacity-20"></div>
         <div className="absolute inset-0 bg-gradient-to-br from-black via-black/95 to-red-900/20"></div>
-        
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-2">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="space-y-6">
-              <div className="inline-flex items-center gap-2 bg-red-600/20 border border-red-600/50 rounded-full px-4 py-2">
-                <span className="text-red-500 font-bold text-lg">Fala neni!</span>
-                <Zap className="w-5 h-5 text-red-500" />
+
+        <div className="relative flex-1 flex items-center w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+          <div className="grid lg:grid-cols-2 gap-4 sm:gap-8 lg:gap-12 items-center w-full">
+            <div className="space-y-3 sm:space-y-4 lg:space-y-6 text-center lg:text-left">
+              <div className="inline-flex items-center gap-2 bg-red-600/20 border border-red-600/50 rounded-full px-3 py-1.5 sm:px-4 sm:py-2">
+                <span className="text-red-500 font-bold text-sm sm:text-base lg:text-lg">Fala neni!</span>
+                <Zap className="w-4 h-4 sm:w-5 sm:h-5 text-red-500" />
               </div>
-              
-              <h1 className="text-5xl lg:text-7xl font-black leading-tight">
+
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black leading-tight">
                 ELETRICISTA<br />
                 <span className="text-red-600">SANDRO ALANIZ</span>
               </h1>
-              
-              <p className="text-xl lg:text-2xl text-gray-300 font-medium">
+
+              <p className="text-sm sm:text-base md:text-lg lg:text-2xl text-gray-300 font-medium">
                 Instalação elétrica com <span className="text-red-500 font-bold">SEGURANÇA</span>, <span className="text-red-500 font-bold">QUALIDADE</span> e <span className="text-red-500 font-bold">CONFIANÇA</span>!
               </p>
-              
-              <div className="flex flex-col sm:flex-row gap-4">
-                <a 
-                  href="https://wa.me/5551986318828" 
-                  target="_blank" 
+
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start">
+                <a
+                  href="https://wa.me/5551986318828"
+                  target="_blank"
                   rel="noopener noreferrer"
-                  className="bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all flex items-center justify-center gap-3 shadow-lg shadow-red-600/30"
+                  className="bg-red-600 hover:bg-red-700 text-white px-5 py-2.5 sm:px-8 sm:py-4 rounded-xl font-bold text-sm sm:text-base lg:text-lg transition-all flex items-center justify-center gap-2 sm:gap-3 shadow-lg shadow-red-600/30"
                 >
-                  <Phone className="w-6 h-6" />
+                  <Phone className="w-4 h-4 sm:w-6 sm:h-6" />
                   FAÇA SEU ORÇAMENTO
                 </a>
-                <button 
+                <button
                   onClick={() => scrollToSection('servicos')}
-                  className="border-2 border-red-600 hover:bg-red-600/10 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all"
+                  className="border-2 border-red-600 hover:bg-red-600/10 text-white px-5 py-2.5 sm:px-8 sm:py-4 rounded-xl font-bold text-sm sm:text-base lg:text-lg transition-all"
                 >
                   NOSSOS SERVIÇOS
                 </button>
               </div>
 
-              <div className="flex items-center gap-4 pt-4">
-                <div className="flex items-center gap-2 text-gray-400">
-                  <MapPin className="w-5 h-5 text-red-500" />
+              <div className="hidden sm:flex items-center gap-4 pt-2 lg:pt-4 justify-center lg:justify-start">
+                <div className="flex items-center gap-2 text-gray-400 text-sm lg:text-base">
+                  <MapPin className="w-4 h-4 lg:w-5 lg:h-5 text-red-500" />
                   <span>Gravataí, Cachoeirinha, POA, Canoas</span>
                 </div>
               </div>
             </div>
 
-            <div className="relative">
+            <div className="relative hidden sm:block">
               <div className="absolute -inset-4 bg-red-600/20 rounded-full blur-3xl"></div>
-              <img 
-                src="/images/electrician-sandro.png" 
-                alt="Eletricista Sandro Alaniz" 
-                className="relative w-full max-w-lg mx-auto drop-shadow-2xl"
+              <img
+                src="/images/electrician-sandro.png"
+                alt="Eletricista Sandro Alaniz"
+                className="relative w-full max-w-[200px] sm:max-w-xs md:max-w-sm lg:max-w-lg mx-auto drop-shadow-2xl"
               />
-              
+
               {/* Floating Badge */}
-              <div className="absolute top-4 right-4 bg-red-600 text-white px-4 py-2 rounded-lg font-bold shadow-lg transform rotate-6">
-                <span className="text-2xl">10+</span>
-                <span className="block text-xs">Anos de<br/>Experiência</span>
+              <div className="absolute top-2 right-2 sm:top-4 sm:right-4 bg-red-600 text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg font-bold shadow-lg transform rotate-6">
+                <span className="text-lg sm:text-2xl">10+</span>
+                <span className="block text-[10px] sm:text-xs">Anos de<br/>Experiência</span>
               </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Selos de Confiança (dentro da mesma tela do hero) */}
+        <div className="relative border-t border-red-600/20 bg-black/50 backdrop-blur-sm py-3 sm:py-4 lg:py-5">
+          <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-3 md:grid-cols-5 gap-2 sm:gap-4 lg:gap-6">
+              {trustBadges.map((badge, index) => (
+                <div key={index} className="flex flex-col items-center text-center gap-1 sm:gap-2">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 lg:w-14 lg:h-14 bg-red-600/10 rounded-full flex items-center justify-center text-red-600">
+                    {badge.icon}
+                  </div>
+                  <span className="font-bold text-[10px] sm:text-xs lg:text-sm leading-tight">{badge.title}</span>
+                  <span className="hidden sm:block text-[10px] lg:text-xs text-gray-500 leading-tight">{badge.desc}</span>
+                </div>
+              ))}
             </div>
           </div>
         </div>
       </section>
 
       {/* Services Section */}
-      <section id="servicos" className="py-20 bg-zinc-900">
+      <section id="servicos" className="py-14 sm:py-20 bg-zinc-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl font-black mb-4">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black mb-4">
               NOSSOS <span className="text-red-600">SERVIÇOS</span>
             </h2>
-            <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+            <p className="text-base sm:text-lg lg:text-xl text-gray-400 max-w-2xl mx-auto">
               Do projeto à execução, tudo com segurança! Especialista em instalações elétricas residenciais e prediais.
             </p>
           </div>
@@ -248,14 +355,14 @@ function App() {
           </div>
 
           {/* Projeto Section */}
-          <div className="mt-16 bg-gradient-to-r from-red-900/30 to-black border border-red-600/30 rounded-3xl p-8 lg:p-12">
-            <div className="grid lg:grid-cols-2 gap-8 items-center">
+          <div className="mt-10 sm:mt-16 bg-gradient-to-r from-red-900/30 to-black border border-red-600/30 rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-12">
+            <div className="grid lg:grid-cols-2 gap-6 sm:gap-8 items-center">
               <div>
                 <div className="inline-flex items-center gap-2 bg-red-600/20 rounded-full px-4 py-2 mb-4">
                   <FileText className="w-5 h-5 text-red-500" />
                   <span className="text-red-400 font-semibold">SERVIÇO ESPECIALIZADO</span>
                 </div>
-                <h3 className="text-3xl lg:text-4xl font-bold mb-4">Leitura e Execução de Projetos</h3>
+                <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4">Leitura e Execução de Projetos</h3>
                 <p className="text-gray-300 text-lg mb-6">
                   Trabalho em parceria com arquitetos e engenheiros na criação e execução de projetos elétricos completos. 
                   Desde o planejamento até a entrega final, garantindo qualidade e conformidade com as normas técnicas.
@@ -299,11 +406,118 @@ function App() {
         </div>
       </section>
 
+      {/* Gallery Section */}
+      <section id="galeria" className="py-14 sm:py-20 bg-black">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-10 sm:mb-16">
+            <div className="inline-flex items-center gap-2 bg-red-600/20 rounded-full px-4 py-2 mb-4">
+              <ImageIcon className="w-5 h-5 text-red-500" />
+              <span className="text-red-400 font-semibold">PORTFÓLIO</span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black mb-4">
+              TRABALHOS <span className="text-red-600">REALIZADOS</span>
+            </h2>
+            <p className="text-base sm:text-lg lg:text-xl text-gray-400 max-w-2xl mx-auto">
+              Fotos e vídeos reais de serviços executados pelo Sandro
+            </p>
+          </div>
+
+          {/* Fotos: cada bloco mostra a imagem inteira, sem corte */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 mb-8 sm:mb-10">
+            {singlePhotos.map((item, index) => (
+              <div
+                key={index}
+                className="rounded-xl sm:rounded-2xl border border-zinc-800 bg-zinc-950 overflow-hidden flex flex-col"
+              >
+                <div className="aspect-square bg-black flex items-center justify-center p-1.5 sm:p-2">
+                  <img
+                    src={item.src}
+                    alt={item.caption}
+                    className="max-w-full max-h-full object-contain"
+                  />
+                </div>
+                <p className="text-[11px] sm:text-xs text-gray-400 p-2 sm:p-3 text-center leading-snug">
+                  {item.caption}
+                </p>
+              </div>
+            ))}
+
+            {/* Card com carrossel: etapas do mesmo processo */}
+            <div
+              className="rounded-xl sm:rounded-2xl border border-zinc-800 bg-zinc-950 overflow-hidden flex flex-col"
+              onTouchStart={handleStepTouchStart}
+              onTouchEnd={handleStepTouchEnd}
+            >
+              <div className="relative aspect-square bg-black flex items-center justify-center p-1.5 sm:p-2">
+                <img
+                  src={stepPhotos[stepIndex].src}
+                  alt={stepPhotos[stepIndex].caption}
+                  className="max-w-full max-h-full object-contain select-none"
+                />
+                <button
+                  onClick={prevStep}
+                  aria-label="Etapa anterior"
+                  className="absolute left-1 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-red-600 rounded-full p-1 sm:p-1.5 transition-colors"
+                >
+                  <ChevronLeft className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                </button>
+                <button
+                  onClick={nextStep}
+                  aria-label="Próxima etapa"
+                  className="absolute right-1 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-red-600 rounded-full p-1 sm:p-1.5 transition-colors"
+                >
+                  <ChevronRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                </button>
+                <span className="absolute top-1 right-1 bg-black/70 text-[9px] sm:text-[10px] px-1.5 py-0.5 rounded-full">
+                  {stepIndex + 1}/{stepPhotos.length}
+                </span>
+              </div>
+              <div className="p-2 sm:p-3 text-center">
+                <p className="text-[11px] sm:text-xs text-gray-400 leading-snug">{stepPhotos[stepIndex].caption}</p>
+                <div className="flex justify-center gap-1.5 mt-1.5 sm:mt-2">
+                  {stepPhotos.map((_, i) => (
+                    <button
+                      key={i}
+                      onClick={() => setStepIndex(i)}
+                      aria-label={`Ir para etapa ${i + 1}`}
+                      className={`w-1.5 h-1.5 rounded-full transition-colors ${i === stepIndex ? 'bg-red-600' : 'bg-zinc-700'}`}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Vídeos sem áudio */}
+          <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
+            {galleryVideos.map((item, index) => (
+              <div
+                key={index}
+                className="rounded-xl sm:rounded-2xl border border-zinc-800 overflow-hidden bg-zinc-900"
+              >
+                <video
+                  src={item.src}
+                  controls
+                  muted
+                  playsInline
+                  preload="metadata"
+                  className="w-full max-h-[320px] sm:max-h-[420px] bg-black"
+                />
+                <div className="p-3 sm:p-4 flex items-center gap-2 text-gray-400">
+                  <VideoIcon className="w-4 h-4 text-red-500" />
+                  <span className="text-xs sm:text-sm">{item.caption}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Why Choose Section */}
-      <section id="sobre" className="py-20 bg-black">
+      <section id="sobre" className="py-14 sm:py-20 bg-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl font-black mb-4">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black mb-4">
               POR QUE ESCOLHER O <span className="text-red-600">ELETRICISTA SANDRO ALANIZ</span>?
             </h2>
           </div>
@@ -323,12 +537,12 @@ function App() {
           </div>
 
           {/* Trust Banner */}
-          <div className="mt-16 bg-red-600 rounded-3xl p-8 lg:p-12 text-center">
-            <Zap className="w-16 h-16 mx-auto mb-4" />
-            <h3 className="text-3xl lg:text-4xl font-black mb-4">
+          <div className="mt-10 sm:mt-16 bg-red-600 rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-12 text-center">
+            <Zap className="w-10 h-10 sm:w-16 sm:h-16 mx-auto mb-3 sm:mb-4" />
+            <h3 className="text-xl sm:text-3xl lg:text-4xl font-black mb-3 sm:mb-4">
               QUALIDADE QUE VOCÊ VÊ,<br />SEGURANÇA QUE VOCÊ SENTE!
             </h3>
-            <p className="text-xl opacity-90">
+            <p className="text-sm sm:text-xl opacity-90">
               Sua casa em boas mãos! Pode contar com o Sandro Alaniz!
             </p>
           </div>
@@ -336,17 +550,54 @@ function App() {
       </section>
 
       {/* Cities Section */}
-      <section className="py-16 bg-zinc-900">
+      <section className="py-12 sm:py-16 bg-zinc-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h3 className="text-center text-2xl font-bold mb-12 text-gray-400">ATENDIMENTO NA REGIÃO</h3>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+          <h3 className="text-center text-lg sm:text-2xl font-bold mb-8 sm:mb-12 text-gray-400">ATENDIMENTO NA REGIÃO</h3>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
             {cities.map((city, index) => (
-              <div 
+              <div
                 key={index}
-                className="flex items-center justify-center gap-3 bg-black rounded-xl p-6 border border-zinc-800 hover:border-red-600 transition-all"
+                className="flex items-center justify-center gap-2 sm:gap-3 bg-black rounded-xl p-4 sm:p-6 border border-zinc-800 hover:border-red-600 transition-all"
               >
-                <MapPin className="w-6 h-6 text-red-600" />
-                <span className="text-xl font-bold">{city}</span>
+                <MapPin className="w-5 h-5 sm:w-6 sm:h-6 text-red-600" />
+                <span className="text-base sm:text-xl font-bold">{city}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section id="faq" className="py-14 sm:py-20 bg-black">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 bg-red-600/20 rounded-full px-4 py-2 mb-4">
+              <HelpCircle className="w-5 h-5 text-red-500" />
+              <span className="text-red-400 font-semibold">DÚVIDAS FREQUENTES</span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black mb-4">
+              PERGUNTAS <span className="text-red-600">FREQUENTES</span>
+            </h2>
+          </div>
+
+          <div className="space-y-4">
+            {faqs.map((faq, index) => (
+              <div
+                key={index}
+                className="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden"
+              >
+                <button
+                  onClick={() => setOpenFaq(openFaq === index ? null : index)}
+                  className="w-full flex items-center justify-between gap-4 p-5 text-left"
+                >
+                  <span className="font-semibold text-lg">{faq.question}</span>
+                  <ChevronDown
+                    className={`w-5 h-5 text-red-500 flex-shrink-0 transition-transform ${openFaq === index ? 'rotate-180' : ''}`}
+                  />
+                </button>
+                {openFaq === index && (
+                  <div className="px-5 pb-5 text-gray-400">{faq.answer}</div>
+                )}
               </div>
             ))}
           </div>
@@ -354,18 +605,18 @@ function App() {
       </section>
 
       {/* Contact Form Section */}
-      <section id="contato" className="py-20 bg-black">
+      <section id="contato" className="py-14 sm:py-20 bg-black">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-4xl lg:text-5xl font-black mb-4">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black mb-4">
               SOLICITE SEU <span className="text-red-600">ORÇAMENTO</span>
             </h2>
-            <p className="text-xl text-gray-400">
+            <p className="text-base sm:text-lg lg:text-xl text-gray-400">
               Preencha o formulário abaixo e receba seu orçamento via WhatsApp
             </p>
           </div>
 
-          <div className="bg-zinc-900 rounded-3xl p-8 lg:p-12 border border-zinc-800">
+          <div className="bg-zinc-900 rounded-2xl sm:rounded-3xl p-5 sm:p-8 lg:p-12 border border-zinc-800">
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
@@ -462,7 +713,7 @@ function App() {
               href="https://wa.me/5551986318828" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-3 text-3xl font-black text-red-600 hover:text-red-500 transition-colors"
+              className="inline-flex items-center gap-2 sm:gap-3 text-xl sm:text-3xl font-black text-red-600 hover:text-red-500 transition-colors"
             >
               <Phone className="w-8 h-8" />
               51 98631-8828
@@ -493,15 +744,26 @@ function App() {
             </div>
             <div>
               <h4 className="font-bold mb-4">Contato</h4>
-              <a 
-                href="https://wa.me/5551986318828" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 text-gray-400 hover:text-red-600 transition-colors"
-              >
-                <Phone className="w-5 h-5" />
-                51 98631-8828
-              </a>
+              <div className="space-y-3">
+                <a
+                  href="https://wa.me/5551986318828"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-gray-400 hover:text-red-600 transition-colors"
+                >
+                  <Phone className="w-5 h-5" />
+                  51 98631-8828
+                </a>
+                <a
+                  href="https://www.instagram.com/sandroalanizeletricista/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-gray-400 hover:text-red-600 transition-colors"
+                >
+                  <Instagram className="w-5 h-5" />
+                  @sandroalanizeletricista
+                </a>
+              </div>
             </div>
           </div>
           <div className="border-t border-zinc-800 pt-8 text-center text-gray-500 space-y-2">
